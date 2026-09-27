@@ -8,33 +8,16 @@ Tagatha keeps a note's inline body tags reflected in its YAML `tags` property.
 It adds missing body tags to frontmatter automatically and can optionally keep
 tag removals synchronized in both directions.
 
-Typing:
+## Plugin Behavior
 
-```markdown
-Consider billing options for client work #financial #client/billing
-```
-
-adds the missing tags to the note's frontmatter:
-
-```yaml
----
-tags:
-  - financial
-  - client/billing
----
-```
-
-## Behavior
-
-- Copies every inline tag recognized by Obsidian in the note body.
-- Preserves existing frontmatter tags and their order.
-- Avoids duplicate tags case-insensitively.
+- Preserves a note's existing frontmatter tags.
+- Case-insensitively avoids duplicate tags.
 - Supports nested tags such as `#client/billing`.
 - Is append-only by default. Removing an inline tag does not remove it from
-  frontmatter unless **Synchronize tag removals** is enabled in Tagatha's
+  frontmatter (or vice versa) unless **Synchronize tag removals** is enabled in Tagatha's
   settings.
 - With **Synchronize tag removals** enabled, removing a tag from either inline
-  text or frontmatter removes every matching tag from the other location.
+  text or frontmatter removes every matching tag from the other location in that note.
 - Compares tags case-insensitively and accepts a leading `#` in frontmatter
   values without creating duplicates.
 - Runs locally and has no network access or telemetry.
@@ -74,7 +57,6 @@ npm run build
 The production build creates `main.js`. To install the plugin manually, place
 `main.js` and `manifest.json` in a vault folder named
 `.obsidian/plugins/tagatha`, then enable **Tagatha** in Community plugins.
-
 ## Releases
 
 Run `npm version <version> --no-git-tag-version`, update `manifest.json` and
