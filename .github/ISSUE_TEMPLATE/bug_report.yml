@@ -1,0 +1,45 @@
+name: Bug report
+description: Report unexpected Tagatha behavior.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the behavior and what you expected instead.
+    validations:
+      required: true
+
+  - type: input
+    id: obsidian-version
+    attributes:
+      label: Obsidian version
+      placeholder: "1.13.1"
+    validations:
+      required: true
+
+  - type: input
+    id: tagatha-version
+    attributes:
+      label: Tagatha version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example note
+      description: Include the relevant frontmatter and body text, with private information removed.
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant errors
+      description: Include any relevant developer console errors.
+      render: shell

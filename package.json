@@ -1,0 +1,37 @@
+{
+  "name": "tagatha",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An Obsidian plugin that copies inline body tags into frontmatter.",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
+    "dev": "node esbuild.config.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit --skipLibCheck"
+  },
+  "keywords": [
+    "obsidian",
+    "obsidian-plugin",
+    "tags",
+    "frontmatter"
+  ],
+  "author": "Chris Zappa",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hellozappa/agatha.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hellozappa/agatha/issues"
+  },
+  "homepage": "https://github.com/hellozappa/agatha#readme",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "builtin-modules": "^5.0.0",
+    "esbuild": "^0.28.2",
+    "obsidian": "^1.13.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2"
+  }
+}
