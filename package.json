@@ -1,8 +1,8 @@
 {
   "name": "tagatha",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "An Obsidian plugin that copies inline body tags into frontmatter.",
+  "description": "An Obsidian plugin that synchronizes inline body tags with frontmatter.",
   "type": "module",
   "scripts": {
     "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",

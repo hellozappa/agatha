@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Tagatha keeps a note's inline body tags reflected in its YAML `tags` property.
+It adds missing body tags to frontmatter automatically and can optionally keep
+tag removals synchronized in both directions.
 
 Typing:
 
@@ -28,8 +30,31 @@ tags:
 - Preserves existing frontmatter tags and their order.
 - Avoids duplicate tags case-insensitively.
 - Supports nested tags such as `#client/billing`.
-- Is append-only. Removing an inline tag does not remove it from frontmatter.
-- Runs locally and has no settings, network access, or telemetry.
+- Is append-only by default. Removing an inline tag does not remove it from
+  frontmatter unless **Synchronize tag removals** is enabled in Tagatha's
+  settings.
+- With **Synchronize tag removals** enabled, removing a tag from either inline
+  text or frontmatter removes every matching tag from the other location.
+- Compares tags case-insensitively and accepts a leading `#` in frontmatter
+  values without creating duplicates.
+- Runs locally and has no network access or telemetry.
+
+## Settings
+
+### Synchronize tag removals
+
+This option is **off by default**, preserving Tagatha's original append-only
+behavior.
+
+When enabled, Tagatha remembers which tags each note has in inline text and
+frontmatter. If a tag that existed in both places is removed from either one,
+Tagatha removes it from the other. This prevents ambiguity when the two forms
+were already different: an existing frontmatter-only tag is not treated as an
+inline-tag deletion.
+
+You can change the option at **Settings → Community plugins → Tagatha**. Turning
+it on records fresh snapshots; turning it off clears those snapshots and returns
+to append-only synchronization.
 
 ## Installation
 

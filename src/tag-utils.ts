@@ -8,6 +8,11 @@ export interface TagPropertyUpdate {
   value: unknown[];
 }
 
+export interface TagRemovalPlan {
+  frontmatterTags: string[];
+  inlineTags: string[];
+}
+
 export interface PositionedInlineTag {
   tag: string;
   position: {
@@ -23,6 +28,24 @@ export interface PositionedInlineTag {
 export function normalizeTag(tag: string): string | null {
   const normalized = tag.trim().replace(/^#+/, "");
   return normalized.length > 0 ? normalized : null;
+}
+
+export function hasNormalizedTag(
+  tags: readonly string[],
+  candidate: string,
+): boolean {
+  const normalizedCandidate = normalizeTag(candidate);
+  if (normalizedCandidate === null) {
+    return false;
+  }
+
+  return tags.some((tag) => {
+    const normalizedTag = normalizeTag(tag);
+    return (
+      normalizedTag !== null &&
+      normalizedTag.toLowerCase() === normalizedCandidate.toLowerCase()
+    );
+  });
 }
 
 export function mergeTags(
@@ -66,12 +89,9 @@ export function createTagPropertyUpdate(
   frontmatter: Record<string, unknown>,
   existingTags: readonly string[],
   inlineTags: readonly string[],
+  removedTags: readonly string[],
 ): TagPropertyUpdate | null {
   const merge = mergeTags(existingTags, inlineTags);
-  if (merge.added.length === 0) {
-    return null;
-  }
-
   const key =
     Object.keys(frontmatter).find(
       (frontmatterKey) => frontmatterKey.toLowerCase() === "tags",
@@ -82,11 +102,107 @@ export function createTagPropertyUpdate(
     : currentValue === undefined || currentValue === null
       ? []
       : [currentValue];
+  const removedKeys = new Set(
+    removedTags
+      .map(normalizeTag)
+      .filter((tag): tag is string => tag !== null)
+      .map((tag) => tag.toLowerCase()),
+  );
+  const retainedValues = currentValues.filter((value) => {
+    if (typeof value !== "string") {
+      return true;
+    }
+
+    const normalized = normalizeTag(value);
+    return normalized === null || !removedKeys.has(normalized.toLowerCase());
+  });
+  const didRemoveTags = retainedValues.length !== currentValues.length;
+  if (merge.added.length === 0 && !didRemoveTags) {
+    return null;
+  }
 
   return {
     key,
-    value: [...currentValues, ...merge.added],
+    value: [...retainedValues, ...merge.added],
   };
+}
+
+export function getTagRemovalPlan(
+  previousFrontmatterTags: readonly string[],
+  previousInlineTags: readonly string[],
+  frontmatterTags: readonly string[],
+  inlineTags: readonly string[],
+): TagRemovalPlan {
+  const frontmatterKeys = new Set(
+    frontmatterTags
+      .map(normalizeTag)
+      .filter((tag): tag is string => tag !== null)
+      .map((tag) => tag.toLowerCase()),
+  );
+  const inlineKeys = new Set(
+    inlineTags
+      .map(normalizeTag)
+      .filter((tag): tag is string => tag !== null)
+      .map((tag) => tag.toLowerCase()),
+  );
+  const previousFrontmatterKeys = new Set(
+    previousFrontmatterTags
+      .map(normalizeTag)
+      .filter((tag): tag is string => tag !== null)
+      .map((tag) => tag.toLowerCase()),
+  );
+  const previousInlineKeys = new Set(
+    previousInlineTags
+      .map(normalizeTag)
+      .filter((tag): tag is string => tag !== null)
+      .map((tag) => tag.toLowerCase()),
+  );
+  const frontmatterTagsToRemove: string[] = [];
+  const inlineTagsToRemove: string[] = [];
+
+  for (const key of previousFrontmatterKeys) {
+    if (!previousInlineKeys.has(key)) {
+      continue;
+    }
+
+    if (!inlineKeys.has(key) && frontmatterKeys.has(key)) {
+      frontmatterTagsToRemove.push(key);
+    } else if (inlineKeys.has(key) && !frontmatterKeys.has(key)) {
+      inlineTagsToRemove.push(key);
+    }
+  }
+
+  return {
+    frontmatterTags: [...new Set(frontmatterTagsToRemove)],
+    inlineTags: [...new Set(inlineTagsToRemove)],
+  };
+}
+
+export function removeInlineTags(
+  content: string,
+  inlineTags: readonly PositionedInlineTag[],
+  removedTags: readonly string[],
+): string {
+  const removedKeys = new Set(
+    removedTags
+      .map(normalizeTag)
+      .filter((tag): tag is string => tag !== null)
+      .map((tag) => tag.toLowerCase()),
+  );
+  const ranges = inlineTags
+    .filter((tag) => {
+      const normalized = normalizeTag(tag.tag);
+      return normalized !== null && removedKeys.has(normalized.toLowerCase());
+    })
+    .map((tag) => tag.position)
+    .sort((left, right) => right.start.offset - left.start.offset);
+
+  return ranges.reduce(
+    (updatedContent, range) =>
+      updatedContent.slice(0, range.start.offset) +
+      updatedContent.slice(range.end.offset),
+    content,
+  );
 }
 
 export function getStableInlineTags(
@@ -95,6 +211,20 @@ export function getStableInlineTags(
   includeTrailingTag: boolean,
   editingOffset: number | null,
 ): string[] {
+  return getStableInlineTagPositions(
+    tags,
+    contentLength,
+    includeTrailingTag,
+    editingOffset,
+  ).map((tag) => tag.tag);
+}
+
+export function getStableInlineTagPositions(
+  tags: readonly PositionedInlineTag[],
+  contentLength: number,
+  includeTrailingTag: boolean,
+  editingOffset: number | null,
+): PositionedInlineTag[] {
   return tags
     .filter(
       (tag) => {
@@ -111,6 +241,5 @@ export function getStableInlineTags(
 
         return tag.position.end.offset < contentLength;
       },
-    )
-    .map((tag) => tag.tag);
+    );
 }
