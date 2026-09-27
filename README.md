@@ -8,6 +8,22 @@ Tagatha keeps a note's inline body tags reflected in its YAML `tags` property.
 It adds missing body tags to frontmatter automatically and can optionally keep
 tag removals synchronized in both directions.
 
+For example, typing:
+
+```markdown
+Consider billing options for client work #financial #client/billing
+```
+
+adds the missing tags to the note's frontmatter:
+
+```yaml
+---
+tags:
+  - financial
+  - client/billing
+---
+```
+
 ## Plugin Behavior
 
 - Preserves a note's existing frontmatter tags.
@@ -21,6 +37,11 @@ tag removals synchronized in both directions.
 - Compares tags case-insensitively and accepts a leading `#` in frontmatter
   values without creating duplicates.
 - Runs locally and has no network access or telemetry.
+
+> **Important:** Tagatha automatically edits a note's frontmatter. When
+> **Synchronize tag removals** is enabled, it can also remove matching inline
+> tags. Back up your vault or try the plugin in a test vault before enabling
+> two-way removal synchronization.
 
 ## Settings
 
@@ -39,7 +60,18 @@ You can change the option at **Settings → Community plugins → Tagatha**. Tur
 it on records fresh snapshots; turning it off clears those snapshots and returns
 to append-only synchronization.
 
+## Compatibility
+
+Requires Obsidian 1.13.0 or later. Tagatha supports desktop and mobile.
+
 ## Installation
+
+### From the Obsidian community directory
+
+After Tagatha is approved, open **Settings → Community plugins**, select
+**Browse**, search for **Tagatha**, then install and enable it.
+
+### Manual installation
 
 Download `main.js` and `manifest.json` from the
 [latest release](https://github.com/hellozappa/tagatha/releases/latest), then place
@@ -57,6 +89,7 @@ npm run build
 The production build creates `main.js`. To install the plugin manually, place
 `main.js` and `manifest.json` in a vault folder named
 `.obsidian/plugins/tagatha`, then enable **Tagatha** in Community plugins.
+
 ## Releases
 
 Run `npm version <version> --no-git-tag-version`, update `manifest.json` and

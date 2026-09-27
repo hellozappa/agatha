@@ -17,6 +17,7 @@ All notable changes to Tagatha are documented in this file.
 - Document default append-only behavior and the optional two-way removal mode.
 - Expand automated coverage for removal planning, property updates, normalized
   matching, and inline-tag text updates.
+- Require Obsidian 1.13.0 or later.
 
 ## [0.1.0] - 2026-09-26
 

@@ -2,7 +2,7 @@
   "id": "tagatha",
   "name": "Tagatha",
   "version": "1.0.0",
-  "minAppVersion": "1.4.4",
+  "minAppVersion": "1.13.0",
   "description": "Synchronizes inline body tags with the tags property.",
   "author": "Chris Zappa",
   "authorUrl": "https://github.com/hellozappa",
