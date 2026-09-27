@@ -20,12 +20,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hellozappa/agatha.git"
+    "url": "git+https://github.com/hellozappa/tagatha.git"
   },
   "bugs": {
-    "url": "https://github.com/hellozappa/agatha/issues"
+    "url": "https://github.com/hellozappa/tagatha/issues"
   },
-  "homepage": "https://github.com/hellozappa/agatha#readme",
+  "homepage": "https://github.com/hellozappa/tagatha#readme",
   "devDependencies": {
     "@types/node": "^24.10.1",
     "builtin-modules": "^5.0.0",

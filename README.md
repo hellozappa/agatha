@@ -1,7 +1,7 @@
 # Tagatha
 
-[![CI](https://github.com/hellozappa/agatha/actions/workflows/ci.yml/badge.svg)](https://github.com/hellozappa/agatha/actions/workflows/ci.yml)
-[![GitHub release](https://img.shields.io/github/v/release/hellozappa/agatha?sort=semver)](https://github.com/hellozappa/agatha/releases)
+[![CI](https://github.com/hellozappa/tagatha/actions/workflows/ci.yml/badge.svg)](https://github.com/hellozappa/tagatha/actions/workflows/ci.yml)
+[![GitHub release](https://img.shields.io/github/v/release/hellozappa/tagatha?sort=semver)](https://github.com/hellozappa/tagatha/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Tagatha keeps a note's inline body tags reflected in its YAML `tags` property.
@@ -34,7 +34,7 @@ tags:
 ## Installation
 
 Download `main.js` and `manifest.json` from the
-[latest release](https://github.com/hellozappa/agatha/releases/latest), then place
+[latest release](https://github.com/hellozappa/tagatha/releases/latest), then place
 both files in a vault folder named `.obsidian/plugins/tagatha`. Enable
 **Tagatha** under **Settings → Community plugins**.
 
